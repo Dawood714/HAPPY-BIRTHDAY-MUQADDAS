@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello My Love! ❤️</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        .font-romantic {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Dynamic Themes */
+        .theme-romantic { background: linear-gradient(135deg, #ffe6e6 0%, #ffb3c6 100%); color: #590d22; }
+        .theme-dark-rose { background: linear-gradient(135deg, #2b0910 0%, #590d22 100%); color: #ffccd5; }
+        .theme-midnight { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #e0e7ff; }
+        .theme-gold { background: linear-gradient(135deg, #2a2500 0%, #4a4200 100%); color: #fef08a; }
+
+        /* Floating Hearts Animation */
+        .heart-particle {
+            position: fixed;
+            bottom: -20px;
+            font-size: 20px;
+            color: rgba(225, 29, 72, 0.6);
+            animation: floatUp 6s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .card-blur {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+        }
+
+        .pulse-slow {
+            animation: pulse 3s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 10px 15px rgba(225, 29, 72, 0.3)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 20px 25px rgba(225, 29, 72, 0.6)); }
+        }
+
+        /* Page Transitions */
+        .page-step {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .page-step.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Cake Candle Glow */
+        .flame {
+            animation: burn 0.5s infinite alternate ease-in-out;
+        }
+        @keyframes burn {
+            0% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* Age Level Up Animation */
+        .strike-through {
+            position: relative;
+            display: inline-block;
+        }
+        .strike-through::after {
+            content: '';
+            position: absolute;
+            left: -5%;
+            top: 50%;
+            width: 110%;
+            height: 4px;
+            background: #e11d48;
+            transform: rotate(-15deg);
+            animation: strikeAnim 0.6s ease-out forwards;
+        }
+        @keyframes strikeAnim {
+            0% { width: 0%; }
+            100% { width: 110%; }
+        }
+
+        .age-pop {
+            animation: agePopAnim 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes agePopAnim {
+            0% { transform: scale(0.2) rotate(-20deg); opacity: 0; }
+            80% { transform: scale(1.2) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* Surprise Card Reveal Animation */
+        .card-pop-out {
+            animation: popOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popOut {
+            0% { opacity: 0; transform: scale(0.3) translateY(100px) rotate(-10deg); }
+            100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+        }
+
+        /* Image Display Adjustments to prevent Face Cutting */
+        .fit-img {
+            object-fit: contain !important;
+            object-position: center !important;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body id="bodyTheme" class="theme-romantic min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+
+    <!-- Floating Hearts Container -->
+    <div id="heartsContainer" class="pointer-events-none fixed inset-0 z-0"></div>
+
+    <!-- Background Music Audio Tag -->
+    <audio id="bgAudio" loop></audio>
+
+    <!-- Top Music Button -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="musicToggleBtn" onclick="window.toggleAudio()" class="bg-white/50 backdrop-blur-md p-3 rounded-full text-lg shadow-lg hover:bg-white/80 transition cursor-pointer">
+            <i class="fas fa-music text-rose-600" id="musicIcon"></i>
+        </button>
+    </div>
+
+    <!-- MAIN APP PAGES CONTAINER -->
+    <main class="flex-grow flex items-center justify-center p-4 z-10 w-full max-w-5xl mx-auto">
+
+        <!-- PAGE 1: INTRO SCREEN -->
+        <div id="page1" class="page-step active flex-col items-center justify-center w-full">
+            <div class="card-blur p-6 md:p-8 rounded-3xl shadow-2xl text-center max-w-sm w-full border-2 border-rose-300 relative z-20">
+                <div class="w-full h-48 mx-auto mb-3 flex items-center justify-center overflow-hidden">
+                    <img id="catImg" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3VxdXptYXkzeGtzdzF4ZnFiZml4cnl3Znk2cmc0bmJxbjlrcjByZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VbnUQpnihPSIgIXuZv/giphy.gif" alt="Cute Kitten" class="max-h-full max-w-full object-contain filter drop-shadow-md">
+                </div>
+
+                <h1 class="text-3xl font-extrabold text-rose-600 font-romantic mb-1">Hello My Love! ❤️</h1>
+                <p class="text-sm text-gray-700 font-medium mb-5">Do you want to see your gift?</p>
+
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-3 relative min-h-[60px] w-full">
+                    <button type="button" onclick="window.goToPage('page2'); window.startMusic();" class="w-full sm:w-auto px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl shadow-lg pulse-slow transition active:scale-95 text-sm flex items-center justify-center gap-2 cursor-pointer">
+                        <span>Yes Please</span> 🎁
+                    </button>
+                    <button type="button" id="noBtn" onclick="window.wrongChoice(event)" class="w-full sm:w-auto px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-2xl shadow text-sm cursor-pointer select-none transition">
+                        No Thanks 😅
+                    </button>
+                </div>
+                
+                <p id="wrongMsg" class="text-xs text-rose-600 mt-4 font-bold hidden animate-pulse">
+                    I promise you will like it 🥺❤️ Click "Yes Please"!
+                </p>
+            </div>
+        </div>
+
+        <!-- PAGE 2: WELCOME & COUNTDOWN TIMER -->
+        <div id="page2" class="page-step flex-col items-center justify-center text-center w-full my-auto">
+            <div class="w-full max-w-lg">
+                <div class="mb-8">
+                    <h1 id="displayTitle" class="text-4xl md:text-6xl font-extrabold mb-2 font-romantic tracking-wide">Happy Birthday!</h1>
+                    <p id="displaySubtitle" class="text-lg md:text-2xl font-light opacity-90">To the most wonderful person in my life</p>
+                </div>
+
+                <div id="countdownSection" class="card-blur p-6 rounded-2xl shadow-xl w-full mb-8">
+                    <h3 class="text-sm uppercase tracking-widest mb-4 opacity-80">Counting Down To Your Special Moment</h3>
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <div class="p-2 bg-white/20 rounded-lg"><span id="cdDays" class="text-2xl font-bold">00</span><p class="text-xs">Days</p></div>
+                        <div class="p-2 bg-white/20 rounded-lg"><span id="cdHours" class="text-2xl font-bold">00</span><p class="text-xs">Hours</p></div>
+                        <div class="p-2 bg-white/20 rounded-lg"><span id="cdMins" class="text-2xl font-bold">00</span><p class="text-xs">Mins</p></div>
+                        <div class="p-2 bg-white/20 rounded-lg"><span id="cdSecs" class="text-2xl font-bold">00</span><p class="text-xs">Secs</p></div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center w-full gap-4">
+                    <button onclick="window.goToPage('page1')" class="px-6 py-2 bg-white/40 rounded-full font-semibold hover:bg-white/60 transition cursor-pointer"><i class="fas fa-arrow-left mr-2"></i> Back</button>
+                    <button onclick="window.goToPage('pageCake'); window.triggerConfetti();" class="px-8 py-3 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 transition flex items-center gap-2 cursor-pointer">
+                        <span>Cut The Cake 🎂</span> <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2.5: CAKE CUTTING SECTION -->
+        <div id="pageCake" class="page-step flex-col items-center justify-center text-center w-full my-auto">
+            <div class="card-blur p-6 md:p-10 rounded-3xl shadow-2xl max-w-lg w-full border-2 border-rose-300 relative">
+                <h2 class="text-4xl md:text-5xl font-romantic font-bold text-rose-600 mb-2">Time To Cut The Cake! 🎂</h2>
+                <p class="text-xs md:text-sm font-semibold opacity-80 uppercase tracking-widest mb-6">Make a wish and click the cake or button</p>
+
+                <div class="relative w-64 h-64 mx-auto mb-6 flex items-center justify-center cursor-pointer group" onclick="window.cutTheCake()">
+                    <div id="cakeVisual" class="transition transform group-hover:scale-105 duration-300">
+                        <div class="text-8xl md:text-9xl relative select-none">
+                            <span id="candleFlame" class="absolute -top-4 left-1/2 -translate-x-1/2 text-2xl text-yellow-400 flame">🔥</span>
+                            🎂
+                        </div>
+                    </div>
+                </div>
+
+                <p id="cakeWishText" class="text-base font-bold text-rose-700 mb-6 h-8 flex items-center justify-center animate-pulse">
+                    Blow out the candle and cut the cake! ✨
+                </p>
+
+                <div class="mb-6">
+                    <button id="cutCakeBtn" onclick="window.cutTheCake()" class="px-8 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-full shadow-lg pulse-slow transition active:scale-95 text-sm inline-flex items-center gap-2 cursor-pointer">
+                        <i class="fas fa-cut"></i> <span>Cut The Cake!</span> 🎉
+                    </button>
+                </div>
+
+                <div class="flex justify-between items-center w-full pt-4 border-t border-rose-200">
+                    <button onclick="window.goToPage('page2')" class="px-6 py-2 bg-white/40 rounded-full font-semibold hover:bg-white/60 transition cursor-pointer"><i class="fas fa-arrow-left mr-2"></i> Countdown</button>
+                    <button onclick="window.goToPage('pageAgeTransition'); window.triggerConfetti();" class="px-8 py-3 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 transition flex items-center gap-2 cursor-pointer">
+                        <span>Level Up 🎉</span> <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW LAYOUT: 18 TO 19 LEVEL UP ANIMATED PAGE -->
+        <div id="pageAgeTransition" class="page-step flex-col items-center justify-center text-center w-full">
+            <div class="card-blur p-8 md:p-10 rounded-3xl shadow-2xl max-w-lg w-full border-2 border-rose-300 relative overflow-hidden">
+                
+                <div class="inline-block px-4 py-1.5 bg-rose-500/20 rounded-full text-rose-600 text-xs font-bold uppercase tracking-widest mb-4">
+                    🎉 Official Level Up Unlocked!
+                </div>
+
+                <h2 id="ageHeaderTitle" class="text-3xl md:text-5xl font-romantic font-bold text-rose-600 mb-2">Goodbye 18... Hello 19! ✨</h2>
+                <p id="ageHeaderSubtitle" class="text-xs md:text-sm font-semibold opacity-80 uppercase tracking-wider mb-8">A New Chapter Begins Today</p>
+
+                <!-- AGE TRANSITION ANIMATED BOX -->
+                <div class="flex justify-center items-center gap-4 md:gap-8 my-6">
+                    <div class="flex flex-col items-center">
+                        <div class="w-20 h-20 md:w-24 md:h-24 bg-white/40 rounded-2xl flex items-center justify-center border-2 border-rose-200 shadow-md">
+                            <span id="oldAgeText" class="text-4xl md:text-5xl font-black text-gray-400 strike-through">18</span>
+                        </div>
+                        <span class="text-xs font-bold text-gray-500 mt-2">Old Chapter</span>
+                    </div>
+
+                    <div class="text-2xl md:text-3xl text-rose-500 animate-bounce">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+
+                    <div class="flex flex-col items-center">
+                        <div class="w-24 h-24 md:w-28 md:h-28 bg-rose-500 text-white rounded-3xl flex items-center justify-center shadow-xl border-4 border-rose-300 age-pop">
+                            <span id="newAgeText" class="text-5xl md:text-6xl font-black tracking-tight">19</span>
+                        </div>
+                        <span class="text-xs font-bold text-rose-600 mt-2">Official Age 🎉</span>
+                    </div>
+                </div>
+
+                <p id="ageMessageText" class="text-sm md:text-base font-medium text-gray-800 leading-relaxed my-6 px-2">
+                    Turning 19 brings more beautiful memories, endless opportunities, and even more love! Welcome to your official 19th year! 💖
+                </p>
+
+                <div class="flex justify-between items-center w-full mt-8 pt-4 border-t border-rose-200/60">
+                    <button onclick="window.goToPage('pageCake')" class="px-6 py-2 bg-white/30 rounded-full font-semibold hover:bg-white/50 transition cursor-pointer"><i class="fas fa-arrow-left mr-2"></i> Cake</button>
+                    <button onclick="window.goToPage('pageSurprise'); window.triggerConfetti();" class="px-8 py-3 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 transition flex items-center gap-2 cursor-pointer">
+                        <span>Secret Surprise 🎁</span> <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: SECRET SURPRISE -->
+        <div id="pageSurprise" class="page-step flex-col items-center justify-center text-center w-full">
+            <div class="card-blur p-8 rounded-3xl shadow-2xl max-w-lg w-full border-2 border-rose-300 relative overflow-hidden">
+                <h2 class="text-3xl font-romantic font-bold mb-2 text-rose-600">A Secret Surprise 🎁</h2>
+                <p class="text-xs uppercase tracking-widest opacity-80 mb-6 font-semibold">Click the box below to unlock your special photo card!</p>
+
+                <div id="surpriseBoxBtn" onclick="window.revealSurprise()" class="cursor-pointer group my-4 inline-block transform hover:scale-110 transition duration-300">
+                    <div class="text-7xl md:text-8xl pulse-slow">
+                        🎁
+                    </div>
+                    <p class="text-xs font-bold text-rose-600 mt-2 bg-white/60 px-4 py-1.5 rounded-full shadow">Tap to Open Box 🎉</p>
+                </div>
+
+                <div id="surpriseCardContainer" class="hidden my-4 card-pop-out">
+                    <div class="bg-white/90 backdrop-blur-md p-4 md:p-5 rounded-2xl shadow-2xl border-2 border-rose-300 text-gray-800 text-center">
+                        <div class="w-full h-56 md:h-64 rounded-xl overflow-hidden mb-3 shadow-md border border-rose-200 bg-black/10 flex items-center justify-center">
+                            <!-- Updated fit-img class to prevent face cropping -->
+                            <img id="surpriseCardImg" src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=700&q=80" alt="Surprise Picture" class="w-full h-full fit-img">
+                        </div>
+                        <h3 id="surpriseCardTitle" class="text-2xl font-romantic font-bold text-rose-600 mb-1">Our Special Memory ❤️</h3>
+                        <p id="surpriseCardMessage" class="text-sm font-medium text-gray-700 leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center w-full mt-8 pt-4 border-t border-rose-200/60">
+                    <button onclick="window.goToPage('pageAgeTransition')" class="px-6 py-2 bg-white/30 rounded-full font-semibold hover:bg-white/50 transition cursor-pointer"><i class="fas fa-arrow-left mr-2"></i> Level 19</button>
+                    <button onclick="window.goToPage('page3'); window.triggerConfetti();" class="px-8 py-3 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 transition flex items-center gap-2 cursor-pointer">
+                        <span>Watch Videos 🎥</span> <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: VIDEOS GRID -->
+        <div id="page3" class="page-step flex-col items-center justify-center w-full my-auto">
+            <div class="card-blur p-6 md:p-8 rounded-3xl shadow-2xl w-full border-2 border-rose-300">
+                <div class="text-center mb-6">
+                    <h2 id="videoSectionTitle" class="text-3xl md:text-5xl font-romantic font-bold text-rose-600 mb-1">Our Video Moments 🎥</h2>
+                    <p id="videoSectionSubtitle" class="text-xs md:text-sm font-semibold opacity-80 uppercase tracking-widest">Special Video Collection Made Just For You</p>
+                </div>
+                <div id="displayVideosGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6 max-h-[60vh] overflow-y-auto p-2"></div>
+                <div class="flex justify-between items-center w-full pt-4 border-t border-rose-200">
+                    <button onclick="window.goToPage('pageSurprise')" class="px-6 py-2 bg-white/40 rounded-full font-semibold hover:bg-white/60 transition cursor-pointer"><i class="fas fa-arrow-left mr-2"></i> Surprise</button>
+                    <button onclick="window.goToPage('pageGallery'); window.triggerConfetti();" class="px-8 py-3 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 transition flex items-center gap-2 cursor-pointer">
+                        <span>Photo Memories 📸</span> <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3.5: PHOTO GALLERY SECTION -->
+        <div id="pageGallery" class="page-step flex-col items-center justify-center w-full my-auto">
+            <div class="card-blur p-6 md:p-8 rounded-3xl shadow-2xl w-full border-2 border-rose-300">
+                <div class="text-center mb-6">
+                    <h2 id="gallerySectionTitle" class="text-3xl md:text-5xl font-romantic font-bold text-rose-600 mb-1">Our Photo Memories 📸</h2>
+                    <p id="gallerySectionSubtitle" class="text-xs md:text-sm font-semibold opacity-80 uppercase tracking-widest">Beautiful Moments Captured Together</p>
+                </div>
+                <div id="displayGallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6 max-h-[60vh] overflow-y-auto p-2"></div>
+                <div class="flex justify-between items-center w-full pt-4 border-t border-rose-200">
+                    <button onclick="window.goToPage('page3')" class="px-6 py-2 bg-white/40 rounded-full font-semibold hover:bg-white/60 transition cursor-pointer"><i class="fas fa-arrow-left mr-2"></i> Videos</button>
+                    <button onclick="window.goToPage('page4'); window.triggerConfetti();" class="px-8 py-3 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 transition flex items-center gap-2 cursor-pointer">
+                        <span>Flower Bouquet 🌸</span> <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 4: FLOWER BOUQUET & NOTES -->
+        <div id="page4" class="page-step flex-col items-center justify-center w-full">
+            <div class="card-blur p-6 md:p-10 rounded-3xl shadow-2xl w-full border-2 border-rose-300">
+                <h2 class="text-4xl md:text-5xl font-romantic font-bold text-center text-rose-600 mb-2">Flowers For You My Heart 🌸</h2>
+                <p class="text-xs text-center opacity-80 mb-8 uppercase tracking-widest font-semibold">A beautiful real flower bouquet & love notes for you</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="flex flex-col items-center justify-center text-center p-2">
+                        <div class="relative cursor-pointer transition transform hover:scale-105" onclick="window.triggerConfetti();">
+                            <img id="flowerPhoto" src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=700&q=80" 
+                                 alt="Flower Bouquet" 
+                                 class="w-64 h-64 md:w-80 md:h-80 fit-img rounded-3xl shadow-2xl border-4 border-rose-300 pulse-slow">
+                            <div class="absolute top-2 right-2 bg-rose-500/80 text-white p-2 rounded-full text-lg shadow-lg animate-bounce">✨</div>
+                        </div>
+                        <p class="text-xs italic font-medium opacity-80 mt-4">Click the Flowers for Magic ✨</p>
+                    </div>
+
+                    <div class="bg-white/40 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-inner border border-white/50 flex flex-col justify-between min-h-[320px]">
+                        <div>
+                            <h3 class="text-2xl font-romantic font-bold text-rose-600 mb-4 border-b border-rose-300/60 pb-2 flex items-center gap-2">
+                                <i class="fas fa-heart text-rose-500"></i> <span>Why You Are My Everything</span>
+                            </h3>
+                            <ul id="displayLovePoints" class="space-y-3 text-sm md:text-base font-medium text-gray-800 mb-6"></ul>
+                        </div>
+
+                        <div class="flex justify-between items-center gap-2">
+                            <button onclick="window.goToPage('pageGallery')" class="px-5 py-2.5 bg-white/40 rounded-xl font-semibold hover:bg-white/60 transition text-sm cursor-pointer"><i class="fas fa-arrow-left mr-1"></i> Photos</button>
+                            <button onclick="window.goToPage('page5'); window.triggerConfetti();" class="py-3 px-6 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2 text-sm cursor-pointer">
+                                <span>Read Messages</span> <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 5: EDITABLE QUESTIONS & ANSWERS LAYOUT -->
+        <div id="page5" class="page-step flex-col items-center justify-center w-full">
+            <div class="w-full">
+                <h2 class="text-3xl font-romantic font-bold text-center mb-6">Special Questions & Messages 💌</h2>
+                <div id="displayMessages" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left mb-8"></div>
+                <div class="flex justify-between items-center w-full">
+                    <button onclick="window.goToPage('page4')" class="px-6 py-2 bg-white/30 rounded-full font-semibold hover:bg-white/50 transition cursor-pointer"><i class="fas fa-arrow-left mr-2"></i> Flowers</button>
+                    <button onclick="window.goToPage('page8')" class="px-8 py-3 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 transition flex items-center gap-2 cursor-pointer">Final Love Note <i class="fas fa-heart"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 8: FINAL LETTER -->
+        <div id="page8" class="page-step flex-col items-center justify-center text-center w-full">
+            <div class="card-blur p-8 rounded-3xl shadow-2xl border-2 border-rose-300 max-w-2xl w-full">
+                <i class="fas fa-heart text-5xl text-rose-500 mb-4 animate-pulse"></i>
+                <h2 class="text-4xl font-romantic font-bold mb-4">From My Heart</h2>
+                <p id="displayFinalMessage" class="text-lg leading-relaxed whitespace-pre-line font-light mb-6"></p>
+                <p class="text-3xl font-romantic font-bold text-rose-600 animate-pulse mb-6">Forever & Always ❤️</p>
+                <div class="flex justify-between items-center w-full">
+                    <button onclick="window.goToPage('page5')" class="px-6 py-2 bg-white/30 rounded-full font-semibold hover:bg-white/50 transition cursor-pointer"><i class="fas fa-arrow-left mr-2"></i> Back</button>
+                    <button onclick="window.goToPage('page1')" class="px-6 py-2 bg-rose-500 text-white font-bold rounded-full hover:bg-rose-600 transition cursor-pointer"><i class="fas fa-redo mr-2"></i> Restart</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Trigger for Admin -->
+    <footer class="py-4 text-center text-xs opacity-40 hover:opacity-100 transition z-20">
+        <span>Made with Love</span> | 
+        <button onclick="window.openAdminAuth()" class="ml-2 hover:text-rose-500 cursor-pointer" title="Admin Login">
+            <i class="fas fa-lock"></i>
+        </button>
+    </footer>
+
+    <!-- ADMIN MODALS -->
+    <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white text-gray-800 p-6 rounded-2xl shadow-2xl max-w-sm w-full">
+            <h3 class="text-xl font-bold mb-4 text-center"><i class="fas fa-user-shield text-rose-500 mr-2"></i>Admin Access</h3>
+            <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password" class="w-full p-3 border rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-rose-500">
+            <div class="flex justify-end gap-2">
+                <button onclick="window.closeModal('authModal')" class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg cursor-pointer">Cancel</button>
+                <button onclick="window.checkAdminPassword()" class="px-4 py-2 bg-rose-500 text-white font-bold rounded-lg hover:bg-rose-600 cursor-pointer">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminPanelModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden z-50 overflow-y-auto p-4">
+        <div class="bg-white text-gray-800 rounded-3xl shadow-2xl max-w-3xl mx-auto my-8 p-6 md:p-8 relative">
+            <div class="flex justify-between items-center border-b pb-4 mb-6">
+                <h2 class="text-2xl font-bold text-rose-600"><i class="fas fa-sliders-h mr-2"></i> Admin Control Dashboard</h2>
+                <button onclick="window.closeModal('adminPanelModal')" class="text-gray-400 hover:text-gray-600 text-2xl cursor-pointer"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="space-y-6">
+
+                <!-- 18 TO 19 AGE TRANSITION ADMIN SETTINGS -->
+                <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                    <h4 class="font-bold text-sm text-rose-700 uppercase mb-3"><i class="fas fa-sort-numeric-up-alt mr-1"></i> Age Transition Settings (18 to 19)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <label class="text-xs font-semibold">Old Age Number</label>
+                            <input type="text" id="cfgOldAge" class="w-full p-2 border rounded-lg text-sm" placeholder="18">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold">New Age Number</label>
+                            <input type="text" id="cfgNewAge" class="w-full p-2 border rounded-lg text-sm" placeholder="19">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold">Age Transition Message</label>
+                        <textarea id="cfgAgeMessage" rows="2" class="w-full p-2 border rounded-lg text-sm" placeholder="Message for 19th birthday"></textarea>
+                    </div>
+                </div>
+
+                <!-- EDITABLE QUESTIONS & ANSWERS ADMIN SECTION -->
+                <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="font-bold text-sm text-rose-700 uppercase"><i class="fas fa-question-circle mr-1"></i> Edit Questions & Messages</h4>
+                        <button onclick="window.addQuestionItem()" class="px-3 py-1 bg-rose-500 text-white rounded-lg text-xs font-semibold cursor-pointer"><i class="fas fa-plus mr-1"></i> Add Question</button>
+                    </div>
+                    <div id="adminQuestionsList" class="space-y-3 max-h-60 overflow-y-auto p-1"></div>
+                </div>
+
+                <!-- Video Settings -->
+                <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                    <h4 class="font-bold text-sm text-rose-700 uppercase mb-3"><i class="fas fa-heading mr-1"></i> Video Page Customization</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                        <div>
+                            <label class="text-xs font-semibold">Video Section Title</label>
+                            <input type="text" id="cfgVideoTitle" class="w-full p-2 border rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold">Video Section Subtitle</label>
+                            <input type="text" id="cfgVideoSubtitle" class="w-full p-2 border rounded-lg text-sm">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-3 pt-3 border-t border-rose-200">
+                        <h4 class="font-bold text-sm text-rose-700 uppercase"><i class="fas fa-video mr-1"></i> Video List</h4>
+                        <button onclick="window.addVideoItem()" class="px-3 py-1 bg-rose-500 text-white rounded-lg text-xs font-semibold cursor-pointer"><i class="fas fa-plus mr-1"></i> Add Video</button>
+                    </div>
+                    <div id="adminVideoList" class="space-y-3 max-h-60 overflow-y-auto p-1"></div>
+                </div>
+
+                <!-- Photo Gallery Settings -->
+                <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                    <h4 class="font-bold text-sm text-rose-700 uppercase mb-3"><i class="fas fa-images mr-1"></i> Photo Gallery Customization</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                        <div>
+                            <label class="text-xs font-semibold">Gallery Section Title</label>
+                            <input type="text" id="cfgGalleryTitle" class="w-full p-2 border rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold">Gallery Section Subtitle</label>
+                            <input type="text" id="cfgGallerySubtitle" class="w-full p-2 border rounded-lg text-sm">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-3 pt-3 border-t border-rose-200">
+                        <h4 class="font-bold text-sm text-rose-700 uppercase"><i class="fas fa-camera mr-1"></i> Photo Gallery List</h4>
+                        <button onclick="window.addGalleryItem()" class="px-3 py-1 bg-rose-500 text-white rounded-lg text-xs font-semibold cursor-pointer"><i class="fas fa-plus mr-1"></i> Add Photo</button>
+                    </div>
+                    <div id="adminGalleryList" class="space-y-3 max-h-60 overflow-y-auto p-1"></div>
+                </div>
+
+                <!-- Surprise Photo Card Settings -->
+                <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                    <h4 class="font-bold text-sm text-rose-700 uppercase mb-3"><i class="fas fa-gift mr-1"></i> Surprise Picture Card Settings</h4>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-xs font-semibold">Card Picture URL</label>
+                            <input type="text" id="cfgSurpriseImgUrl" class="w-full p-2 border rounded-lg text-sm" placeholder="Image URL">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold">Card Title/Caption</label>
+                            <input type="text" id="cfgSurpriseTitle" class="w-full p-2 border rounded-lg text-sm" placeholder="Card Title">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold">Card Love Message</label>
+                            <textarea id="cfgSurpriseMessage" rows="2" class="w-full p-2 border rounded-lg text-sm" placeholder="Message on card"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-xl border">
+                    <h4 class="font-bold mb-3 text-sm text-gray-600 uppercase">General Settings</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs font-semibold">Website Title</label>
+                            <input type="text" id="cfgTitle" class="w-full p-2 border rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold">Subtitle</label>
+                            <input type="text" id="cfgSubtitle" class="w-full p-2 border rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold">Target Birthday Date & Time</label>
+                            <input type="datetime-local" id="cfgTargetDate" class="w-full p-2 border rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold">Theme Style</label>
+                            <select id="cfgTheme" class="w-full p-2 border rounded-lg text-sm">
+                                <option value="theme-romantic">Romantic Pink</option>
+                                <option value="theme-dark-rose">Dark Rose</option>
+                                <option value="theme-midnight">Midnight Blue</option>
+                                <option value="theme-gold">Golden Luxury</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-xl border">
+                    <h4 class="font-bold mb-3 text-sm text-gray-600 uppercase">Music & Effects</h4>
+                    <div class="mb-3">
+                        <label class="text-xs font-semibold">Audio URL (MP3)</label>
+                        <input type="text" id="cfgMusicUrl" class="w-full p-2 border rounded-lg text-sm">
+                    </div>
+                    <div class="flex gap-4 text-sm font-medium">
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="cfgHeartsOn" class="rounded text-rose-500"> Floating Hearts</label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="cfgFireworksOn" class="rounded text-rose-500"> Confetti Effects</label>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-xl border">
+                    <h4 class="font-bold mb-3 text-sm text-gray-600 uppercase">Flower Page Settings</h4>
+                    <div class="mb-3">
+                        <label class="text-xs font-semibold">Flower Image URL</label>
+                        <input type="text" id="cfgFlowerUrl" class="w-full p-2 border rounded-lg text-sm">
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-semibold">Love Points</span>
+                        <button onclick="window.addLovePoint()" class="px-3 py-1 bg-rose-500 text-white rounded-lg text-xs font-semibold cursor-pointer"><i class="fas fa-plus mr-1"></i> Add Point</button>
+                    </div>
+                    <div id="adminLovePointsList" class="space-y-2"></div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-xl border">
+                    <h4 class="font-bold mb-3 text-sm text-gray-600 uppercase">Final Love Letter</h4>
+                    <textarea id="cfgFinalMessage" rows="4" class="w-full p-2 border rounded-lg text-sm"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-4 border-t flex justify-end gap-3 sticky bottom-0 bg-white p-2">
+                <button onclick="window.closeModal('adminPanelModal')" class="px-5 py-2 text-gray-600 font-semibold rounded-xl hover:bg-gray-100 cursor-pointer">Cancel</button>
+                <button onclick="window.saveAdminSettings()" class="px-6 py-2 bg-rose-500 text-white font-bold rounded-xl shadow-lg hover:bg-rose-600 cursor-pointer"><i class="fas fa-save mr-2"></i> Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT EXECUTOR -->
+    <script>
+        const defaultData = {
+            adminPassword: "1234",
+            title: "Happy Birthday, My Love! ❤️",
+            subtitle: "You make every day brighter and my world happier.",
+            targetDate: new Date(Date.now() + 86400000 * 2).toISOString().slice(0, 16),
+            theme: "theme-romantic",
+            musicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            heartsOn: true,
+            fireworksOn: true,
+            oldAge: "18",
+            newAge: "19",
+            ageMessage: "Turning 19 brings more beautiful memories, endless opportunities, and even more love! Welcome to your official 19th year! 💖",
+            flowerPhotoUrl: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=700&q=80",
+            videoTitle: "Our Video Moments 🎥",
+            videoSubtitle: "Special Video Collection Made Just For You",
+            videos: [
+                { title: "1. Special Day Memory ❤️", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
+                { title: "2. Sweet Smile 🌸", url: "https://www.w3schools.com/html/movie.mp4" },
+                { title: "3. Precious Moment ✨", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
+                { title: "4. Lovely Days 💕", url: "https://www.w3schools.com/html/movie.mp4" }
+            ],
+            galleryTitle: "Our Photo Memories 📸",
+            gallerySubtitle: "Beautiful Moments Captured Together",
+            gallery: [
+                { caption: "Sweet Memory 💖", url: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80" },
+                { caption: "Together Forever ✨", url: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80" },
+                { caption: "Cute Smiles 😊", url: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80" },
+                { caption: "Unforgettable Day 🌹", url: "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=600&q=80" }
+            ],
+            lovePoints: [
+                "Aapki muskaan mera poora din roshan kar deti hai.",
+                "Aapka pyaar aur care mere liye duniya ka sabse bada gift hai.",
+                "Har lamha jo aapke saath guzarta hai, woh sabse khoobsoorat memory ban jaata hai.",
+                "Always stay happy and blessed, my love! 💕"
+            ],
+            surpriseCardImgUrl: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=700&q=80",
+            surpriseCardTitle: "Our Special Memory ❤️",
+            surpriseMessage: "Surprise! You are the best gift life has given me. I love you endlessly! 💖",
+            finalMessage: "Happy Birthday my special person!\n\nThank you for bringing so much warmth, laughter, and romance into my life. On your birthday, I wish you endless happiness, good health, and success.\n\nI am so grateful to have you by my side. Let's make this year unforgettable!",
+            questions: [
+                { title: "What I Love About You?", body: "Your smile, your kindness, and the way you always care for me." },
+                { title: "Favorite Memory?", body: "Every single moment we spend together becomes my favorite memory." },
+                { title: "My Promise To You?", body: "To always stand by your side and make you smile every day!" }
+            ]
+        };
+
+        window.appData = JSON.parse(localStorage.getItem('birthdayData')) || defaultData;
+        window.isAudioPlaying = false;
+        window.isCakeCut = false;
+
+        window.goToPage = function(pageId) {
+            document.querySelectorAll('.page-step').forEach(page => page.classList.remove('active'));
+            const target = document.getElementById(pageId);
+            if(target) target.classList.add('active');
+        };
+
+        window.cutTheCake = function() {
+            if(window.isCakeCut) return;
+            window.isCakeCut = true;
+            
+            const flame = document.getElementById('candleFlame');
+            if(flame) flame.classList.add('hidden');
+
+            document.getElementById('cakeWishText').innerHTML = "Yasss! Happy Birthday My Love! 🍰🎉";
+            document.getElementById('cakeVisual').innerHTML = `
+                <div class="text-8xl md:text-9xl relative transition transform scale-110">
+                    🍰🎈
+                </div>
+            `;
+            
+            document.getElementById('cutCakeBtn').innerText = "Cake Cut Successfully! 🎉";
+            document.getElementById('cutCakeBtn').classList.remove('pulse-slow', 'bg-rose-500');
+            document.getElementById('cutCakeBtn').classList.add('bg-green-500');
+
+            window.triggerConfetti();
+            setTimeout(() => window.triggerConfetti(), 300);
+            setTimeout(() => window.triggerConfetti(), 600);
+        };
+
+        window.wrongChoice = function(e) {
+            if (e) e.preventDefault();
+            document.getElementById('wrongMsg').classList.remove('hidden');
+            document.getElementById('catImg').src = "https://media.giphy.com/media/L95W4wv8nnb9K/giphy.gif";
+        };
+
+        window.startMusic = function() {
+            const audio = document.getElementById('bgAudio');
+            if(window.appData.musicUrl && !window.isAudioPlaying) {
+                audio.play().then(() => { window.isAudioPlaying = true; }).catch(() => {});
+            }
+        };
+
+        window.toggleAudio = function() {
+            const audio = document.getElementById('bgAudio');
+            const icon = document.getElementById('musicIcon');
+            if (window.isAudioPlaying) {
+                audio.pause();
+                icon.className = "fas fa-music text-rose-600";
+            } else {
+                audio.play();
+                icon.className = "fas fa-pause text-rose-600";
+            }
+            window.isAudioPlaying = !window.isAudioPlaying;
+        };
+
+        window.triggerConfetti = function() {
+            if (window.appData.fireworksOn && typeof confetti === 'function') {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }
+        };
+
+        window.revealSurprise = function() {
+            const boxBtn = document.getElementById('surpriseBoxBtn');
+            const cardContainer = document.getElementById('surpriseCardContainer');
+            
+            boxBtn.classList.add('hidden');
+            cardContainer.classList.remove('hidden');
+            
+            window.triggerConfetti();
+            setTimeout(() => window.triggerConfetti(), 300);
+        };
+
+        window.renderWebsite = function() {
+            document.getElementById('bodyTheme').className = `min-h-screen relative overflow-x-hidden flex flex-col justify-between ${window.appData.theme}`;
+            document.getElementById('displayTitle').innerText = window.appData.title;
+            document.getElementById('displaySubtitle').innerText = window.appData.subtitle;
+            
+            // Age Transition Render
+            document.getElementById('oldAgeText').innerText = window.appData.oldAge || '18';
+            document.getElementById('newAgeText').innerText = window.appData.newAge || '19';
+            document.getElementById('ageHeaderTitle').innerText = `Goodbye ${window.appData.oldAge || '18'}... Hello ${window.appData.newAge || '19'}! ✨`;
+            document.getElementById('ageMessageText').innerText = window.appData.ageMessage || "Turning 19 brings more beautiful memories, endless opportunities, and even more love!";
+
+            // Video Section Render
+            document.getElementById('videoSectionTitle').innerText = window.appData.videoTitle || "Our Video Moments 🎥";
+            document.getElementById('videoSectionSubtitle').innerText = window.appData.videoSubtitle || "Special Video Collection Made Just For You";
+
+            const videoGrid = document.getElementById('displayVideosGrid');
+            videoGrid.innerHTML = '';
+            (window.appData.videos || []).forEach((vid, idx) => {
+                const vidBox = document.createElement('div');
+                vidBox.className = "bg-white/40 p-2.5 rounded-2xl shadow border border-white/50 flex flex-col justify-between";
+                vidBox.innerHTML = `
+                    <h4 class="text-xs font-bold text-rose-600 mb-1 text-center truncate">${vid.title || ('Video ' + (idx+1))}</h4>
+                    <div class="w-full h-36 bg-black/20 rounded-xl overflow-hidden">
+                        <video src="${vid.url}" controls class="w-full h-full object-cover"></video>
+                    </div>
+                `;
+                videoGrid.appendChild(vidBox);
+            });
+
+            // Photo Gallery Render with fit-img class
+            document.getElementById('gallerySectionTitle').innerText = window.appData.galleryTitle || "Our Photo Memories 📸";
+            document.getElementById('gallerySectionSubtitle').innerText = window.appData.gallerySubtitle || "Beautiful Moments Captured Together";
+
+            const galGrid = document.getElementById('displayGallery');
+            galGrid.innerHTML = '';
+            (window.appData.gallery || []).forEach((g, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white/40 p-2 rounded-2xl shadow border border-white/50 flex flex-col items-center group overflow-hidden";
+                card.innerHTML = `
+                    <div class="w-full h-40 rounded-xl overflow-hidden mb-2 bg-black/10 flex items-center justify-center">
+                        <img src="${g.url}" alt="${g.caption || 'Memory'}" class="w-full h-full fit-img group-hover:scale-105 transition duration-300">
+                    </div>
+                    <p class="text-xs font-bold text-rose-700 text-center truncate w-full">${g.caption || ('Photo ' + (idx+1))}</p>
+                `;
+                galGrid.appendChild(card);
+            });
+
+            if(window.appData.flowerPhotoUrl) {
+                document.getElementById('flowerPhoto').src = window.appData.flowerPhotoUrl;
+            }
+
+            const pointsList = document.getElementById('displayLovePoints');
+            pointsList.innerHTML = '';
+            (window.appData.lovePoints || []).forEach(pt => {
+                const li = document.createElement('li');
+                li.className = "flex items-center gap-2 bg-white/40 p-2.5 rounded-xl border border-white/30";
+                li.innerHTML = `<span>💖</span> <span>${pt}</span>`;
+                pointsList.appendChild(li);
+            });
+
+            // Render Questions & Messages
+            const msgGrid = document.getElementById('displayMessages');
+            msgGrid.innerHTML = '';
+            (window.appData.questions || []).forEach(q => {
+                const card = document.createElement('div');
+                card.className = "card-blur p-5 rounded-2xl border border-rose-300 shadow-md";
+                card.innerHTML = `<h3 class="font-bold text-rose-600 text-lg mb-1">${q.title}</h3><p class="text-sm opacity-90">${q.body}</p>`;
+                msgGrid.appendChild(card);
+            });
+
+            // Render Surprise Picture Card
+            document.getElementById('surpriseCardImg').src = window.appData.surpriseCardImgUrl || "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=700&q=80";
+            document.getElementById('surpriseCardTitle').innerText = window.appData.surpriseCardTitle || "Our Special Memory ❤️";
+            document.getElementById('surpriseCardMessage').innerText = window.appData.surpriseMessage;
+            
+            document.getElementById('displayFinalMessage').innerText = window.appData.finalMessage;
+        };
+
+        window.openAdminAuth = function() {
+            document.getElementById('authModal').classList.remove('hidden');
+        };
+
+        window.closeModal = function(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        };
+
+        window.checkAdminPassword = function() {
+            const input = document.getElementById('adminPasswordInput').value;
+            if (input === window.appData.adminPassword) {
+                window.closeModal('authModal');
+                document.getElementById('adminPasswordInput').value = '';
+                window.populateAdminFields();
+                document.getElementById('adminPanelModal').classList.remove('hidden');
+            } else {
+                alert('Wrong Password!');
+            }
+        };
+
+        window.populateAdminFields = function() {
+            document.getElementById('cfgTitle').value = window.appData.title || '';
+            document.getElementById('cfgSubtitle').value = window.appData.subtitle || '';
+            document.getElementById('cfgTargetDate').value = window.appData.targetDate || '';
+            document.getElementById('cfgTheme').value = window.appData.theme || 'theme-romantic';
+            document.getElementById('cfgMusicUrl').value = window.appData.musicUrl || '';
+            document.getElementById('cfgHeartsOn').checked = !!window.appData.heartsOn;
+            document.getElementById('cfgFireworksOn').checked = !!window.appData.fireworksOn;
+            
+            // Age Settings
+            document.getElementById('cfgOldAge').value = window.appData.oldAge || '18';
+            document.getElementById('cfgNewAge').value = window.appData.newAge || '19';
+            document.getElementById('cfgAgeMessage').value = window.appData.ageMessage || '';
+
+            document.getElementById('cfgFlowerUrl').value = window.appData.flowerPhotoUrl || '';
+            document.getElementById('cfgVideoTitle').value = window.appData.videoTitle || '';
+            document.getElementById('cfgVideoSubtitle').value = window.appData.videoSubtitle || '';
+            document.getElementById('cfgGalleryTitle').value = window.appData.galleryTitle || '';
+            document.getElementById('cfgGallerySubtitle').value = window.appData.gallerySubtitle || '';
+            
+            document.getElementById('cfgSurpriseImgUrl').value = window.appData.surpriseCardImgUrl || '';
+            document.getElementById('cfgSurpriseTitle').value = window.appData.surpriseCardTitle || '';
+            document.getElementById('cfgSurpriseMessage').value = window.appData.surpriseMessage || '';
+            
+            document.getElementById('cfgFinalMessage').value = window.appData.finalMessage || '';
+
+            window.renderAdminQuestions();
+            window.renderAdminVideos();
+            window.renderAdminGallery();
+            window.renderAdminLovePoints();
+        };
+
+        // Render Questions Admin Settings
+        window.renderAdminQuestions = function() {
+            const container = document.getElementById('adminQuestionsList');
+            container.innerHTML = '';
+            (window.appData.questions || []).forEach((q, index) => {
+                const div = document.createElement('div');
+                div.className = "flex flex-col gap-2 bg-white p-3 rounded-lg border";
+                div.innerHTML = `
+                    <div class="flex justify-between items-center gap-2">
+                        <input type="text" value="${q.title || ''}" onchange="window.appData.questions[${index}].title = this.value" placeholder="Question Title" class="w-full p-1.5 border rounded text-xs font-bold">
+                        <button onclick="window.removeQuestionItem(${index})" class="text-red-500 hover:text-red-700 p-1 cursor-pointer"><i class="fas fa-trash"></i></button>
+                    </div>
+                    <textarea onchange="window.appData.questions[${index}].body = this.value" placeholder="Question Message/Answer" rows="2" class="w-full p-1.5 border rounded text-xs">${q.body || ''}</textarea>
+                `;
+                container.appendChild(div);
+            });
+        };
+
+        window.addQuestionItem = function() {
+            if(!window.appData.questions) window.appData.questions = [];
+            window.appData.questions.push({ title: "New Question?", body: "Enter message here..." });
+            window.renderAdminQuestions();
+        };
+
+        window.removeQuestionItem = function(index) {
+            window.appData.questions.splice(index, 1);
+            window.renderAdminQuestions();
+        };
+
+        window.renderAdminVideos = function() {
+            const container = document.getElementById('adminVideoList');
+            container.innerHTML = '';
+            (window.appData.videos || []).forEach((v, index) => {
+                const div = document.createElement('div');
+                div.className = "flex gap-2 items-center bg-white p-2 rounded-lg border";
+                div.innerHTML = `
+                    <input type="text" value="${v.title}" onchange="window.appData.videos[${index}].title = this.value" placeholder="Title" class="w-1/3 p-1.5 border rounded text-xs">
+                    <input type="text" value="${v.url}" onchange="window.appData.videos[${index}].url = this.value" placeholder="Video MP4 Link" class="w-2/3 p-1.5 border rounded text-xs">
+                    <button onclick="window.removeVideoItem(${index})" class="text-red-500 hover:text-red-700 p-1 cursor-pointer"><i class="fas fa-trash"></i></button>
+                `;
+                container.appendChild(div);
+            });
+        };
+
+        window.addVideoItem = function() {
+            if(!window.appData.videos) window.appData.videos = [];
+            window.appData.videos.push({ title: `Video ${window.appData.videos.length + 1}`, url: "https://www.w3schools.com/html/mov_bbb.mp4" });
+            window.renderAdminVideos();
+        };
+
+        window.removeVideoItem = function(index) {
+            window.appData.videos.splice(index, 1);
+            window.renderAdminVideos();
+        };
+
+        window.renderAdminGallery = function() {
+            const container = document.getElementById('adminGalleryList');
+            container.innerHTML = '';
+            (window.appData.gallery || []).forEach((g, index) => {
+                const div = document.createElement('div');
+                div.className = "flex gap-2 items-center bg-white p-2 rounded-lg border";
+                div.innerHTML = `
+                    <input type="text" value="${g.caption || ''}" onchange="window.appData.gallery[${index}].caption = this.value" placeholder="Caption/Title" class="w-1/3 p-1.5 border rounded text-xs">
+                    <input type="text" value="${g.url || ''}" onchange="window.appData.gallery[${index}].url = this.value" placeholder="Image URL" class="w-2/3 p-1.5 border rounded text-xs">
+                    <button onclick="window.removeGalleryItem(${index})" class="text-red-500 hover:text-red-700 p-1 cursor-pointer"><i class="fas fa-trash"></i></button>
+                `;
+                container.appendChild(div);
+            });
+        };
+
+        window.addGalleryItem = function() {
+            if(!window.appData.gallery) window.appData.gallery = [];
+            window.appData.gallery.push({ caption: "New Memory 💖", url: "https://picsum.photos/400/300" });
+            window.renderAdminGallery();
+        };
+
+        window.removeGalleryItem = function(index) {
+            window.appData.gallery.splice(index, 1);
+            window.renderAdminGallery();
+        };
+
+        window.renderAdminLovePoints = function() {
+            const container = document.getElementById('adminLovePointsList');
+            container.innerHTML = '';
+            (window.appData.lovePoints || []).forEach((pt, index) => {
+                const div = document.createElement('div');
+                div.className = "flex gap-2 items-center";
+                div.innerHTML = `
+                    <input type="text" value="${pt}" onchange="window.appData.lovePoints[${index}] = this.value" class="w-full p-2 border rounded-lg text-xs">
+                    <button onclick="window.removeLovePoint(${index})" class="text-red-500 hover:text-red-700 cursor-pointer"><i class="fas fa-trash"></i></button>
+                `;
+                container.appendChild(div);
+            });
+        };
+
+        window.addLovePoint = function() {
+            window.appData.lovePoints.push("New love point note...");
+            window.renderAdminLovePoints();
+        };
+
+        window.removeLovePoint = function(index) {
+            window.appData.lovePoints.splice(index, 1);
+            window.renderAdminLovePoints();
+        };
+
+        window.saveAdminSettings = function() {
+            window.appData.title = document.getElementById('cfgTitle').value;
+            window.appData.subtitle = document.getElementById('cfgSubtitle').value;
+            window.appData.targetDate = document.getElementById('cfgTargetDate').value;
+            window.appData.theme = document.getElementById('cfgTheme').value;
+            window.appData.musicUrl = document.getElementById('cfgMusicUrl').value;
+            window.appData.heartsOn = document.getElementById('cfgHeartsOn').checked;
+            window.appData.fireworksOn = document.getElementById('cfgFireworksOn').checked;
+            
+            // Save Age Values
+            window.appData.oldAge = document.getElementById('cfgOldAge').value;
+            window.appData.newAge = document.getElementById('cfgNewAge').value;
+            window.appData.ageMessage = document.getElementById('cfgAgeMessage').value;
+
+            window.appData.flowerPhotoUrl = document.getElementById('cfgFlowerUrl').value;
+            window.appData.videoTitle = document.getElementById('cfgVideoTitle').value;
+            window.appData.videoSubtitle = document.getElementById('cfgVideoSubtitle').value;
+            window.appData.galleryTitle = document.getElementById('cfgGalleryTitle').value;
+            window.appData.gallerySubtitle = document.getElementById('cfgGallerySubtitle').value;
+            
+            window.appData.surpriseCardImgUrl = document.getElementById('cfgSurpriseImgUrl').value;
+            window.appData.surpriseCardTitle = document.getElementById('cfgSurpriseTitle').value;
+            window.appData.surpriseMessage = document.getElementById('cfgSurpriseMessage').value;
+            
+            window.appData.finalMessage = document.getElementById('cfgFinalMessage').value;
+
+            localStorage.setItem('birthdayData', JSON.stringify(window.appData));
+            window.renderWebsite();
+            window.closeModal('adminPanelModal');
+            alert('Settings saved successfully! 🎉');
+        };
+
+        window.onload = function() {
+            window.renderWebsite();
+            
+            const audio = document.getElementById('bgAudio');
+            if (window.appData.musicUrl) audio.src = window.appData.musicUrl;
+
+            if(window.appData.heartsOn) {
+                const container = document.getElementById('heartsContainer');
+                setInterval(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-particle fa-solid fa-heart';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                    heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
+                    container.appendChild(heart);
+                    setTimeout(() => heart.remove(), 6000);
+                }, 400);
+            }
+
+            setInterval(() => {
+                const target = new Date(window.appData.targetDate).getTime();
+                const now = new Date().getTime();
+                const diff = target - now;
+
+                if (diff > 0) {
+                    document.getElementById('cdDays').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                    document.getElementById('cdHours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                    document.getElementById('cdMins').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                    document.getElementById('cdSecs').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+                }
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
